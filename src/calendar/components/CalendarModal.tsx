@@ -1,13 +1,28 @@
 import Modal from 'react-modal'
 import DatePicker from 'react-datepicker'
+import { addHours } from 'date-fns'
 
 import 'react-datepicker/dist/react-datepicker.css'
-import { useUiStore } from '../../hooks'
+import { useForm, useUiStore } from '../../hooks'
 
 Modal.setAppElement('#root')
 
+const initialState = {
+  title: '',
+  notes: '',
+  start: new Date(),
+  end: addHours(new Date(), 2)
+}
+
 export const CalendarModal = () => {
   const { toggleModal, isOpenModal } = useUiStore()
+  const {
+    title,
+    start,
+    end,
+    notes,
+    onInputChange
+  } = useForm({ initialState })
 
   const onCloseModal = () => {
     toggleModal()
@@ -27,7 +42,9 @@ export const CalendarModal = () => {
       }}
     >
       <h1 className='font-bold text-2xl pb-4'>New Event</h1>
+
       <hr />
+
       <form
         className='flex flex-col gap-2 px-4 py-2'
         // onSubmit={onSubmit}
@@ -38,8 +55,9 @@ export const CalendarModal = () => {
             className='border border-gray-300 p-2 rounded-md pl-3 w-full'
             dateFormat='Pp'
             locale='es'
-            // onChange={(event) => onDateChange(event, 'start')}
-            // selected={formValues.start}
+            name='start'
+            // onChange={onInputChange}
+            selected={start}
             showTimeSelect
             timeCaption='Hora'
           />
@@ -50,11 +68,12 @@ export const CalendarModal = () => {
             className='border border-gray-300 p-2 rounded-md pl-3 w-full'
             dateFormat='Pp'
             locale='es'
-            // minDate={formValues.start}
-            // onChange={(event) => onDateChange(event, 'end')}
-            // selected={formValues.end}
+            name='end'
             showTimeSelect
             timeCaption='Hora'
+            minDate={start}
+            // onChange={(event) => onDateChange(event, 'end')}
+            selected={end}
           />
         </div>
         <hr />
@@ -63,17 +82,17 @@ export const CalendarModal = () => {
           <input
             // className={`border border-gray-300 p-2 rounded-md pl-3 ${titleClass}`}
             name='title'
-            // onChange={onChangeInputValue}
+            onChange={onInputChange}
             placeholder='Event title'
             type='text'
-            // value={formValues.title}
+            value={title}
           />
           <textarea
             className='pt-2 border border-gray-300 pl-3 mt-2 rounded-md' name='notes'
-            // onChange={onChangeInputValue}
+            onChange={onInputChange}
             placeholder='Notes'
             rows={8}
-            // value={formValues.notes}
+            value={notes}
           />
         </div>
         <button
