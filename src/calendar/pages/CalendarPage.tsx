@@ -1,7 +1,6 @@
 import { Calendar, EventProps, type View } from 'react-big-calendar'
 
-import { localizer } from '../../helpers/calendarLocalizer'
-import { getMessagesEs } from '../../helpers/getMessagesEs'
+import { localizer, getMessages } from '../../helpers'
 
 import { useCalendarStore, useUiStore } from '../../hooks'
 import { CalendarEvent, CalendarModal } from '..'
@@ -12,6 +11,12 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 const events: CalendarEventType[] = [
   {
     title: 'All Day Event very long title',
+    allDay: true,
+    start: new Date(),
+    end: new Date()
+  },
+  {
+    title: 'Other notes',
     allDay: true,
     start: new Date(),
     end: new Date()
@@ -33,9 +38,9 @@ export const CalendarPage = () => {
   const { toggleModal } = useUiStore()
   const { setActiveEvent } = useCalendarStore()
 
-  const onDoubleClick = (event: CalendarEventType) => {
-    console.log('click')
-  }
+  // const onDoubleClick = (event: CalendarEventType) => {
+  //   console.log('click')
+  // }
 
   const onSelectEvent = (event: CalendarEventType) => {
     setActiveEvent(event)
@@ -57,8 +62,8 @@ export const CalendarPage = () => {
         eventPropGetter={eventStyleGetter}
         events={events as Array<EventProps<CalendarEventType>>}
         localizer={localizer}
-        messages={getMessagesEs()}
-        onDoubleClickEvent={onDoubleClick}
+        messages={getMessages()}
+        // onDoubleClickEvent={onDoubleClick}
         onSelectEvent={onSelectEvent}
         onView={onViewChanged}
         // startAccessor='slotStart'

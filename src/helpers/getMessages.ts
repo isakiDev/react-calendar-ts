@@ -1,4 +1,4 @@
-export const getMessagesEs = () => {
+export const getMessages = () => {
   return {
     allDay: 'Todo el día',
     previous: '<',

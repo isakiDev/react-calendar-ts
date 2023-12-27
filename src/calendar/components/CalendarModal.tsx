@@ -1,10 +1,12 @@
 import Modal from 'react-modal'
-import DatePicker from 'react-datepicker'
+import DatePicker, { registerLocale } from 'react-datepicker'
 import { addHours } from 'date-fns'
+import es from 'date-fns/locale/es'
 
-import 'react-datepicker/dist/react-datepicker.css'
 import { useForm, useUiStore } from '../../hooks'
+import 'react-datepicker/dist/react-datepicker.css'
 
+registerLocale('es', es)
 Modal.setAppElement('#root')
 
 const initialState = {
@@ -16,12 +18,14 @@ const initialState = {
 
 export const CalendarModal = () => {
   const { toggleModal, isOpenModal } = useUiStore()
+
   const {
     title,
     start,
     end,
     notes,
-    onInputChange
+    onInputChange,
+    onDateChange
   } = useForm({ initialState })
 
   const onCloseModal = () => {
@@ -56,7 +60,7 @@ export const CalendarModal = () => {
             dateFormat='Pp'
             locale='es'
             name='start'
-            // onChange={onInputChange}
+            onChange={(event) => { onDateChange({ value: event, type: 'start' }) } }
             selected={start}
             showTimeSelect
             timeCaption='Hora'
@@ -68,12 +72,12 @@ export const CalendarModal = () => {
             className='border border-gray-300 p-2 rounded-md pl-3 w-full'
             dateFormat='Pp'
             locale='es'
+            minDate={start}
             name='end'
+            onChange={(event) => { onDateChange({ value: event, type: 'end' }) } }
+            selected={end}
             showTimeSelect
             timeCaption='Hora'
-            minDate={start}
-            // onChange={(event) => onDateChange(event, 'end')}
-            selected={end}
           />
         </div>
         <hr />
@@ -81,6 +85,7 @@ export const CalendarModal = () => {
           <label className='font-semibold'>Title</label>
           <input
             // className={`border border-gray-300 p-2 rounded-md pl-3 ${titleClass}`}
+            className={'border border-gray-300 p-2 rounded-md pl-3'}
             name='title'
             onChange={onInputChange}
             placeholder='Event title'

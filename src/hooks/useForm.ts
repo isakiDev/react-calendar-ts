@@ -6,17 +6,28 @@ interface Props<T> {
   formValidations?: object
 }
 
+interface DatePickerChange {
+  value: Date | null
+  type: 'start' | 'end'
+}
+
 export const useForm = <T extends Record<string, unknown>>({ initialState, formValidations = {} }: Props<T>) => {
   const [formState, setFormState] = useState(initialState)
 
-  // FormEvent<HTMLFormElement
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target
+    const { name, value } = event?.target
     setFormState(prev => ({ ...prev, [name]: value }))
+  }
+
+  const onDateChange = ({ value, type }: DatePickerChange) => {
+    if (!value) return
+    setFormState(prev => ({ ...prev, [type]: value }))
   }
 
   return {
     ...formState,
-    onInputChange
+
+    onInputChange,
+    onDateChange
   }
 }
