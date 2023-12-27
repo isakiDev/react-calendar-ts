@@ -1,4 +1,4 @@
-import { Calendar, EventProps, type View } from 'react-big-calendar'
+import { Calendar, type View } from 'react-big-calendar'
 
 import { localizer, getMessages } from '../../helpers'
 
@@ -7,21 +7,7 @@ import { CalendarEvent, CalendarModal } from '..'
 import { CalendarEvent as CalendarEventType } from '../../types'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-
-const events: CalendarEventType[] = [
-  {
-    title: 'All Day Event very long title',
-    allDay: true,
-    start: new Date(),
-    end: new Date()
-  },
-  {
-    title: 'Other notes',
-    allDay: true,
-    start: new Date(),
-    end: new Date()
-  }
-]
+import { useEffect } from 'react'
 
 const eventStyleGetter = () => {
   const style = {
@@ -36,7 +22,7 @@ const eventStyleGetter = () => {
 
 export const CalendarPage = () => {
   const { toggleModal } = useUiStore()
-  const { setActiveEvent } = useCalendarStore()
+  const { events, setActiveEvent, startLoadingEvents } = useCalendarStore()
 
   // const onDoubleClick = (event: CalendarEventType) => {
   //   console.log('click')
@@ -51,6 +37,10 @@ export const CalendarPage = () => {
     console.log({ change: event })
   }
 
+  useEffect(() => {
+    startLoadingEvents()
+  }, [])
+
   return (
     <>
       <Calendar
@@ -60,7 +50,7 @@ export const CalendarPage = () => {
         culture='es'
         // endAccessor='slotEnd'
         eventPropGetter={eventStyleGetter}
-        events={events as Array<EventProps<CalendarEventType>>}
+        events={events}
         localizer={localizer}
         messages={getMessages()}
         // onDoubleClickEvent={onDoubleClick}

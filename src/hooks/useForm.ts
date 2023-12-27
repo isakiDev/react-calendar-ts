@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 interface Props<T> {
   initialState: T
-  formValidations?: object
+  formValidations?: T
 }
 
 interface DatePickerChange {
@@ -11,7 +11,7 @@ interface DatePickerChange {
   type: 'start' | 'end'
 }
 
-export const useForm = <T extends Record<string, unknown>>({ initialState, formValidations = {} }: Props<T>) => {
+export const useForm = <T>({ initialState, formValidations }: Props<T>) => {
   const [formState, setFormState] = useState(initialState)
 
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -24,10 +24,16 @@ export const useForm = <T extends Record<string, unknown>>({ initialState, formV
     setFormState(prev => ({ ...prev, [type]: value }))
   }
 
+  const onSetFormState = (data: T) => {
+    setFormState(data)
+  }
+
   return {
+    formState,
     ...formState,
 
     onInputChange,
-    onDateChange
+    onDateChange,
+    onSetFormState
   }
 }
