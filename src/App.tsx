@@ -3,7 +3,7 @@ import { authRouter, journalRouter } from './router'
 import { AUTH_STATUS } from './consts'
 
 export const App = () => {
-  const status = AUTH_STATUS.AUTHENTICATED
+  const status = AUTH_STATUS.NOT_AUTHEN
 
   const checkRoutes = (status === AUTH_STATUS.NOT_AUTHEN)
     ? createBrowserRouter(authRouter)

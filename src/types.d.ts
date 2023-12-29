@@ -1,6 +1,6 @@
 // calendar
 export interface CalendarEvent {
-  id: string
+  id?: string
   title: string
   notes: string
   start: Date

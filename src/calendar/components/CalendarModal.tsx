@@ -58,7 +58,7 @@ export const CalendarModal = () => {
       return
     }
 
-    if (title.length <= 0) {
+    if (title.trim().length <= 0) {
       Swal.fire('Empy Title', 'Review the title entered', 'error')
       return
     }

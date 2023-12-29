@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { 
   onSetActiveEvent,
   onUpdateEvent,
-  onAddNewEvent,
   onLoadEvents,
   RootState 
 } from '../store'

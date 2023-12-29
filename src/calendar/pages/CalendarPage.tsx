@@ -3,7 +3,7 @@ import { Calendar, type View } from 'react-big-calendar'
 import { localizer, getMessages } from '../../helpers'
 
 import { useCalendarStore, useUiStore } from '../../hooks'
-import { CalendarEvent, CalendarModal } from '..'
+import { ButtonAdd, ButtonDelete, CalendarEvent, CalendarModal, Navbar } from '..'
 import { CalendarEvent as CalendarEventType } from '../../types'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
@@ -43,6 +43,7 @@ export const CalendarPage = () => {
 
   return (
     <>
+      <Navbar/>
       <Calendar
         components={{
           event: CalendarEvent
@@ -62,6 +63,8 @@ export const CalendarPage = () => {
       />
 
       <CalendarModal/>
+      <ButtonAdd/>
+      <ButtonDelete/>
     </>
   )
 }
