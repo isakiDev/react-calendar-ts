@@ -1,13 +1,24 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { authRouter, journalRouter } from './router'
+import { authRouter, calendarRouter } from './router'
 import { AUTH_STATUS } from './consts'
+import { useAuthStore } from './hooks'
 
 export const App = () => {
-  const status = AUTH_STATUS.NOT_AUTHEN
+  const { status } = useAuthStore()
 
-  const checkRoutes = (status === AUTH_STATUS.NOT_AUTHEN)
+  // useEffect(() => {
+  //   checkAuthToken()
+  // }, [])
+
+  // if (status === AUTH_STATUS.CHECKING) {
+  //   return (
+  //     <Loading />
+  //   )
+  // }
+
+  const checkRoutes = (status === AUTH_STATUS.NOT_AUTHEN || status === AUTH_STATUS.CHECKING)
     ? createBrowserRouter(authRouter)
-    : createBrowserRouter(journalRouter)
+    : createBrowserRouter(calendarRouter)
 
   return <RouterProvider router={checkRoutes}/>
 }

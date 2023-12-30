@@ -2,13 +2,14 @@
 import { Link } from 'react-router-dom'
 // import Swal from 'sweetalert2'
 
-// import { useForm } from '../../hooks/useForm'
-// import { LOGIN_FORM_FIELDS } from '../../constants'
-// import { useAuthStore } from '../../hooks'
+import { useForm } from '../../hooks/useForm'
+import { useAuthStore } from '../../hooks'
+import { LOGIN_FORM_FIELDS } from '../../consts'
+import React from 'react'
 
 export const LoginPage = () => {
-  // const { email, password, onInputChange } = useForm(LOGIN_FORM_FIELDS)
-  // const { startLogin, errorMessage } = useAuthStore()
+  const { email, password, onInputChange } = useForm({ initialState: LOGIN_FORM_FIELDS })
+  const { startLogin } = useAuthStore()
 
   // useEffect(() => {
   //   if (errorMessage !== null) {
@@ -16,17 +17,17 @@ export const LoginPage = () => {
   //   }
   // }, [errorMessage])
 
-  // const onSubmit = (event) => {
-  //   event.preventDefault()
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
-  //   startLogin({ email, password })
-  // }
+    startLogin({ email, password })
+  }
 
   return (
     <div className='min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12'>
       <form
         className='p-10 xs:p-0 mx-auto md:w-full md:max-w-md'
-        // onSubmit={onSubmit}
+        onSubmit={onSubmit}
       >
         <h1 className='font-bold text-center text-2xl mb-5'>Login</h1>
         <div className='bg-white shadow w-full rounded-lg divide-y divide-gray-200'>
@@ -35,17 +36,17 @@ export const LoginPage = () => {
             <input
               className='border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full'
               name='email'
-              // onChange={onInputChange}
+              onChange={onInputChange}
               type='email'
-              // value={email}
+              value={email}
             />
             <label className='font-semibold text-sm text-gray-600 pb-1 block'>Password</label>
             <input
               className='border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full'
               name='password'
-              // onChange={onInputChange}
+              onChange={onInputChange}
               type='password'
-              // value={password}
+              value={password}
             />
             <button
               className='transition duration-200 bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block'

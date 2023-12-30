@@ -1,13 +1,7 @@
-// import { useAuthStore } from '../../hooks'
+import { useAuthStore } from '../../hooks'
 
 export const Navbar = () => {
-  // const { user, startLogout } = useAuthStore()
-
-  const user = {
-    name: 'test'
-  }
-
-  const startLogout = () => {}
+  const { user, startLogout } = useAuthStore()
 
   return (
     <nav

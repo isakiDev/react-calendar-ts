@@ -12,3 +12,9 @@ export interface User {
   id: string
   name: string
 }
+
+export interface AuthUser {
+  name?: string
+  email: string
+  password: string
+}

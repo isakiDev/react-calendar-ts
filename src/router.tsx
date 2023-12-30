@@ -13,7 +13,7 @@ export const authRouter = [
   }
 ]
 
-export const journalRouter = [
+export const calendarRouter = [
   {
     path: '/*',
     element: <Navigate to='/'/>
