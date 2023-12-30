@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 
-import { onChecking, onLogin, onLogout } from '../store'
+import { onChecking, onLogin, onLogout, onLogoutCalendar } from '../store'
 
 import { AuthUser } from "../types"
 import { RootState } from "../store"
@@ -17,7 +17,7 @@ export const useAuthStore = () => {
       // set token in local storage
       window.localStorage.setItem('token', 'dawdawdawdawd')
       // dispatch login
-      dispatch(onLogin({ name: 'Test', id: '1'}))
+      dispatch(onLogin({ name: 'TestLogin', id: '1'}))
     } catch (error) {
       dispatch(onLogout('Incorrect credentials'))
 
@@ -28,15 +28,43 @@ export const useAuthStore = () => {
   }
 
   const startRegister = async ({ name, email, password }: AuthUser) => {
+    dispatch(onChecking())
 
+    try {
+      
+      // create a user
+
+      window.localStorage.setItem('token', 'dawdawdawd')
+
+      dispatch(onLogin({ name: 'TestRegister', id: '1' }))
+    } catch (error) {
+      // dispatch(onLogout(error.response.data?.msg || '--'))
+      dispatch(onLogout('error'))
+
+      // setTimeout(() => {
+      //   dispatch(clearErrorMessage())
+      // }, 10)
+    }
   }
 
   const checkAuthToken = async () => {
+    const token = window.localStorage.getItem('token')
 
+    if (!token) return dispatch(onLogout('null'))
+
+    try {
+      // renew token
+      window.localStorage.setItem('token', 'tokenrenewPPPPPPPP')
+      dispatch(onLogin({ name: 'TestCheck', id: '1'}))
+    } catch (error) {
+      dispatch(onLogout(null))
+    }
   }
 
   const startLogout = () => {
-
+    window.localStorage.clear()
+    dispatch(onLogoutCalendar())
+    dispatch(onLogout(null))
   }
 
   return {

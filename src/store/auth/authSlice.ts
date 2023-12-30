@@ -8,6 +8,8 @@ interface AuthState {
   errorMessage: string | null
 }
 
+type ErrorMessage = AuthState['errorMessage']
+
 const initialState: AuthState = {
   status: 'checking',
   user: {},
@@ -28,7 +30,7 @@ export const authSlice = createSlice({
       state.user = payload
       state.errorMessage = null
     },
-    onLogout: (state, { payload } : { payload: string }) => {
+    onLogout: (state, { payload } : { payload: ErrorMessage }) => {
       state.status = 'not_authenticated'
       state.user = {}
       state.errorMessage = payload
