@@ -18,3 +18,26 @@ export interface AuthUser {
   email: string
   password: string
 }
+
+// Axios response
+export interface TokenResponse {
+  token: string
+  user: {
+    id: string
+    email?: string
+    name: string
+  }
+}
+
+interface ValidationError {
+  type: string
+  msg: string
+  path: string
+  location: string
+}
+
+type ValidationErrors = Record<string, ValidationError>
+
+interface ErrorResponse {
+  errors: ValidationErrors[]
+}

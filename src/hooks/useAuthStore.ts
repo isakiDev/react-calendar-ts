@@ -1,9 +1,11 @@
 import { useDispatch, useSelector } from "react-redux"
 
-import { onChecking, onLogin, onLogout, onLogoutCalendar } from '../store'
+import { clearErrorMessage, onChecking, onLogin, onLogout, onLogoutCalendar } from '../store'
 
-import { AuthUser } from "../types"
+import { AuthUser, ErrorResponse, TokenResponse, ValidationErrors } from "../types"
 import { RootState } from "../store"
+import { calendarApi } from "../config"
+import { AxiosError, isAxiosError } from "axios"
 
 export const useAuthStore = () => {
   const dispatch = useDispatch()
@@ -13,17 +15,17 @@ export const useAuthStore = () => {
     dispatch(onChecking())
 
     try {
-      // checking user with credentials
-      // set token in local storage
-      window.localStorage.setItem('token', 'dawdawdawdawd')
-      // dispatch login
-      dispatch(onLogin({ name: 'TestLogin', id: '1'}))
+      const { data } = await calendarApi.post<TokenResponse>('auth/login', { email, password })
+
+      window.localStorage.setItem('token', data.token)
+
+      dispatch(onLogin({ name: data.user.name, id: data.user.id }))
     } catch (error) {
       dispatch(onLogout('Incorrect credentials'))
 
-      // setTimeout(() => {
-      //   dispatch(clearErrorMessage())
-      // }, 10)
+      setTimeout(() => {
+        dispatch(clearErrorMessage())
+      }, 10)
     }
   }
 
@@ -50,12 +52,14 @@ export const useAuthStore = () => {
   const checkAuthToken = async () => {
     const token = window.localStorage.getItem('token')
 
-    if (!token) return dispatch(onLogout('null'))
+    if (!token) return dispatch(onLogout(null))
 
     try {
-      // renew token
-      window.localStorage.setItem('token', 'tokenrenewPPPPPPPP')
-      dispatch(onLogin({ name: 'TestCheck', id: '1'}))
+      const { data } = await calendarApi.get<TokenResponse>('auth/rev')
+
+      window.localStorage.setItem('token', data.token)
+
+      dispatch(onLogin({ name: data.user.name, id: data.user.id}))
     } catch (error) {
       dispatch(onLogout(null))
     }
