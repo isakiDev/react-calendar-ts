@@ -7,6 +7,8 @@ import {
 } from '../store'
 
 import { CalendarEvent } from '../types'
+import { calendarApi } from '../config'
+import Swal from 'sweetalert2'
 
 export const useCalendarStore = () => {
   const dispatch = useDispatch()
@@ -20,22 +22,13 @@ export const useCalendarStore = () => {
     dispatch(onUpdateEvent(calendarEvent))
   }
 
-  const startLoadingEvents = () => {
-    const events: CalendarEvent[] = [
-      {
-        id: '1',
-        notes: 'First note',
-        title: 'A title 1',
-        start: new Date(),
-        end: new Date(),
-        user: {
-          id: '1',
-          name: 'Gaspar'
-        }
-      }
-    ]
-
-    dispatch(onLoadEvents(events))
+  const startLoadingEvents = async () => {
+    try {
+      const { data } = await calendarApi.get('/calendar')
+      dispatch(onLoadEvents(data))
+    } catch (error) {
+      Swal.fire('Error')      
+    }
   }
 
   return {
