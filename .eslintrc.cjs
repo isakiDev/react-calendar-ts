@@ -22,22 +22,12 @@ module.exports = {
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
-        "sourceType": "module"
+        "sourceType": "module",
+        "project": "./tsconfig.json"
     },
     "plugins": [
         "react"
     ],
     "rules": {
-        "@typescript-eslint/explicit-function-return-type": 'off',
-        "react/react-in-jsx-scope": "off",
-        "react/prop-types": "off",
-        "@typescript-eslint/strict-boolean-expressions": "off",
-        "@typescript-eslint/no-unnecessary-type-assertion": "off",
-        
-        // jsx
-        'react/jsx-closing-bracket-location': 'error',
-        'react/jsx-indent-props': [ 'error', 2 ],
-        'react/jsx-indent': [ 'error', 2 ],
-        'react/jsx-sort-props': 'error'
     }
 }
