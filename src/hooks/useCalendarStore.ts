@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { 
+import {
   onSetActiveEvent,
   onUpdateEvent,
   onLoadEvents,
-  RootState 
+  type RootState
 } from '../store'
 
-import { CalendarEvent } from '../types'
+import { type CalendarEvent } from '../types'
 import { calendarApi } from '../config'
 import Swal from 'sweetalert2'
 
@@ -27,14 +27,14 @@ export const useCalendarStore = () => {
       const { data } = await calendarApi.get('/calendar')
       dispatch(onLoadEvents(data))
     } catch (error) {
-      Swal.fire('Error')      
+      Swal.fire('Error')
     }
   }
 
   return {
     events,
     activeEvent,
-    
+
     setActiveEvent,
     startSavingEvent,
     startLoadingEvents

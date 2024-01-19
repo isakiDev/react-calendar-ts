@@ -1,4 +1,4 @@
-import { useCalendarStore, useUiStore } from '../../hooks'
+import { useUiStore } from '../../hooks'
 
 export const ButtonDelete = () => {
   // const { hasEventSelected, startDeletingEvent } = useCalendarStore()

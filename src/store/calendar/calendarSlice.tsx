@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { CalendarEvent } from '../../types'
+import { type CalendarEvent } from '../../types'
 
 interface CalendarState {
   isLoadingEvents: boolean

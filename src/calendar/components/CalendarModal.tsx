@@ -7,7 +7,7 @@ import { addHours, differenceInSeconds } from 'date-fns'
 import es from 'date-fns/locale/es'
 
 import { useCalendarStore, useForm, useUiStore } from '../../hooks'
-import {  CalendarEvent } from '../../types.d'
+import { type CalendarEvent } from '../../types.d'
 
 import 'react-datepicker/dist/react-datepicker.css'
 import Swal from 'sweetalert2'
@@ -16,7 +16,7 @@ registerLocale('es', es)
 Modal.setAppElement('#root')
 
 const initialState: CalendarEvent = {
-  id:'',
+  id: '',
   user: {
     id: '',
     name: ''
@@ -62,7 +62,7 @@ export const CalendarModal = () => {
       Swal.fire('Empy Title', 'Review the title entered', 'error')
       return
     }
-    
+
     startSavingEvent(formState)
     toggleModal()
   }

@@ -1,11 +1,8 @@
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from 'react-redux'
+import { clearErrorMessage, onChecking, onLogin, onLogout, onLogoutCalendar, type RootState } from '../store'
+import { type AuthUser, type TokenResponse } from '../types'
 
-import { clearErrorMessage, onChecking, onLogin, onLogout, onLogoutCalendar } from '../store'
-
-import { AuthUser, ErrorResponse, TokenResponse, ValidationErrors } from "../types"
-import { RootState } from "../store"
-import { calendarApi } from "../config"
-import { AxiosError, isAxiosError } from "axios"
+import { calendarApi } from '../config'
 
 export const useAuthStore = () => {
   const dispatch = useDispatch()
@@ -33,7 +30,6 @@ export const useAuthStore = () => {
     dispatch(onChecking())
 
     try {
-      
       // create a user
 
       window.localStorage.setItem('token', 'dawdawdawd')
@@ -59,7 +55,7 @@ export const useAuthStore = () => {
 
       window.localStorage.setItem('token', data.token)
 
-      dispatch(onLogin({ name: data.user.name, id: data.user.id}))
+      dispatch(onLogin({ name: data.user.name, id: data.user.id }))
     } catch (error) {
       dispatch(onLogout(null))
     }

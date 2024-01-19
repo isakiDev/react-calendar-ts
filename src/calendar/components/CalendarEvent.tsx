@@ -1,4 +1,4 @@
-import { CalendarEvent as CalendarEventType } from '../../types'
+import { type CalendarEvent as CalendarEventType } from '../../types'
 
 interface Props {
   event: CalendarEventType

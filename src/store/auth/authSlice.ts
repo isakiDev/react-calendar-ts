@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { type AUTH_STATUS } from '../../consts'
-import { User } from '../../types'
+import { type User } from '../../types'
 
 interface AuthState {
   status: typeof AUTH_STATUS[keyof typeof AUTH_STATUS]
-  user: User | {}
+  user: User | null
   errorMessage: string | null
 }
 
@@ -12,7 +12,7 @@ type ErrorMessage = AuthState['errorMessage']
 
 const initialState: AuthState = {
   status: 'checking',
-  user: {},
+  user: null,
   errorMessage: null
 }
 
@@ -22,17 +22,17 @@ export const authSlice = createSlice({
   reducers: {
     onChecking: (state) => {
       state.status = 'checking'
-      state.user = {}
+      state.user = null
       state.errorMessage = null
     },
     onLogin: (state, { payload }: { payload: User }) => {
-      state.status  = 'authenticated'
+      state.status = 'authenticated'
       state.user = payload
       state.errorMessage = null
     },
-    onLogout: (state, { payload } : { payload: ErrorMessage }) => {
+    onLogout: (state, { payload }: { payload: ErrorMessage }) => {
       state.status = 'not_authenticated'
-      state.user = {}
+      state.user = null
       state.errorMessage = payload
     },
     clearErrorMessage: (state) => {

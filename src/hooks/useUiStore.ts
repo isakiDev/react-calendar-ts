@@ -1,7 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { onToggleModal } from '../store'
-
-import { RootState } from '../store'
+import { onToggleModal, type RootState } from '../store'
 
 export const useUiStore = () => {
   const { isOpenModal } = useSelector((state: RootState) => state.ui)

@@ -4,7 +4,7 @@ import { localizer, getMessages } from '../../helpers'
 
 import { useCalendarStore, useUiStore } from '../../hooks'
 import { ButtonAdd, ButtonDelete, CalendarEvent, CalendarModal, Navbar } from '..'
-import { CalendarEvent as CalendarEventType } from '../../types'
+import { type CalendarEvent as CalendarEventType } from '../../types'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { useEffect } from 'react'
