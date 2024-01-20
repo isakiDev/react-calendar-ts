@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-import { toast } from 'sonner'
+import { toast } from 'react-hot-toast'
 
 import { useForm } from '../../hooks/useForm'
 import { useAuthStore } from '../../hooks'
@@ -13,7 +13,7 @@ export const LoginPage = () => {
 
   useEffect(() => {
     if (errorMessage !== null) {
-      toast.error(`Authentication error : ${errorMessage}`)
+      toast.error(errorMessage)
     }
   }, [errorMessage])
 

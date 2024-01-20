@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
+import { Toaster } from 'react-hot-toast'
+
 import { authRouter, calendarRouter } from './router'
 import { useAuthStore } from './hooks'
 import { AUTH_STATUS } from './consts'
@@ -23,5 +25,10 @@ export const App = () => {
     ? createBrowserRouter(authRouter)
     : createBrowserRouter(calendarRouter)
 
-  return <RouterProvider router={checkRoutes}/>
+  return (
+    <>
+      <Toaster position='top-right'/>
+      <RouterProvider router={checkRoutes}/>
+    </>
+  )
 }
