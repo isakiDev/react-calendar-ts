@@ -1,29 +1,32 @@
 import { useEffect } from 'react'
+
 import { Calendar, type View } from 'react-big-calendar'
+import toast from 'react-hot-toast'
 
 import { localizer, getMessages, handleErrorAxios } from '../../helpers'
-
-import { useCalendarStore, useUiStore } from '../../hooks'
+import { useAuthStore, useCalendarStore, useUiStore } from '../../hooks'
 import { ButtonAdd, ButtonDelete, CalendarEvent, CalendarModal, Navbar } from '..'
 import { type ErrorType, type CalendarEvent as CalendarEventType } from '../../types'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-import toast from 'react-hot-toast'
-
-const eventStyleGetter = () => {
-  const style = {
-    backgroundColor: '#465660',
-    borderRadius: '0px',
-    opacity: 0.8,
-    color: 'white'
-  }
-
-  return { style }
-}
 
 export const CalendarPage = () => {
   const { toggleModal } = useUiStore()
   const { events, setActiveEvent, startLoadingEvents } = useCalendarStore()
+  const { user } = useAuthStore()
+
+  const eventStyleGetter = (event: CalendarEventType) => {
+    const isMyEvent = user?.id === event.user._id
+
+    const style = {
+      backgroundColor: isMyEvent ? '#000' : '#465660',
+      borderRadius: '0px',
+      opacity: 0.8,
+      color: 'white'
+    }
+
+    return { style }
+  }
 
   // const onDoubleClick = (event: CalendarEventType) => {
   //   console.log('click')
@@ -39,6 +42,8 @@ export const CalendarPage = () => {
   }
 
   useEffect(() => {
+    toast.success(`Welcome ${user?.name}`)
+
     startLoadingEvents()
       .catch((error: ErrorType) => toast.error(handleErrorAxios(error)))
   }, [])
