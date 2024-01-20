@@ -1,13 +1,14 @@
+import { useEffect } from 'react'
 import { Calendar, type View } from 'react-big-calendar'
 
-import { localizer, getMessages } from '../../helpers'
+import { localizer, getMessages, handleErrorAxios } from '../../helpers'
 
 import { useCalendarStore, useUiStore } from '../../hooks'
 import { ButtonAdd, ButtonDelete, CalendarEvent, CalendarModal, Navbar } from '..'
-import { type CalendarEvent as CalendarEventType } from '../../types'
+import { type ErrorType, type CalendarEvent as CalendarEventType } from '../../types'
 
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-import { useEffect } from 'react'
+import toast from 'react-hot-toast'
 
 const eventStyleGetter = () => {
   const style = {
@@ -39,6 +40,7 @@ export const CalendarPage = () => {
 
   useEffect(() => {
     startLoadingEvents()
+      .catch((error: ErrorType) => toast.error(handleErrorAxios(error)))
   }, [])
 
   return (

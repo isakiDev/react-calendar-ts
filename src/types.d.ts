@@ -1,3 +1,5 @@
+import { type AxiosError } from 'axios'
+
 // calendar
 export interface CalendarEvent {
   id?: string
@@ -41,3 +43,5 @@ type ValidationErrors = Record<string, ValidationError>
 interface ErrorResponse {
   errors: ValidationErrors[]
 }
+
+export type ErrorType = Error | AxiosError

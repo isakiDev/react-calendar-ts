@@ -1,16 +1,16 @@
 import { useEffect } from 'react'
 
 import Modal from 'react-modal'
-import DatePicker, { registerLocale } from 'react-datepicker'
-
 import { addHours, differenceInSeconds } from 'date-fns'
+import DatePicker, { registerLocale } from 'react-datepicker'
 import es from 'date-fns/locale/es'
+import { toast } from 'react-hot-toast'
 
 import { useCalendarStore, useForm, useUiStore } from '../../hooks'
-import { type CalendarEvent } from '../../types.d'
+import { type ErrorType, type CalendarEvent } from '../../types.d'
 
 import 'react-datepicker/dist/react-datepicker.css'
-import Swal from 'sweetalert2'
+import { handleErrorAxios } from '../../helpers'
 
 registerLocale('es', es)
 Modal.setAppElement('#root')
@@ -54,16 +54,19 @@ export const CalendarModal = () => {
     const difference = differenceInSeconds(end, start)
 
     if (isNaN(difference) || difference <= 0) {
-      Swal.fire('Incorrect Dates', 'Review the date entered', 'error')
+      toast.error('Invalid date')
       return
     }
 
     if (title.trim().length <= 0) {
-      Swal.fire('Empy Title', 'Review the title entered', 'error')
+      toast.error('The title must not be empty')
       return
     }
 
     startSavingEvent(formState)
+      .then(() => toast.success('Event updated'))
+      .catch((error: ErrorType) => toast.error(handleErrorAxios(error)))
+
     toggleModal()
   }
 
