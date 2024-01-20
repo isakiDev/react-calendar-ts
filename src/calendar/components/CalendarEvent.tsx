@@ -5,12 +5,12 @@ interface Props {
 }
 
 export const CalendarEvent = ({ event }: Props) => {
-  const { title } = event
+  const { title, user } = event
 
   return (
     <>
       <strong>{title}</strong>
-      <span>A user</span>
+      <span> {user?.name}</span>
     </>
   )
 }
