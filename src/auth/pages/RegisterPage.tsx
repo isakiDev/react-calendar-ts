@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-import Swal from 'sweetalert2'
+// import Swal from 'sweetalert2'
+import { toast } from 'sonner'
 
 import { useForm } from '../../hooks/useForm'
 import { useAuthStore } from '../../hooks'
@@ -16,7 +17,7 @@ export const RegisterPage = () => {
 
   useEffect(() => {
     if (errorMessage !== null) {
-      Swal.fire('Authentication failed', errorMessage, 'error')
+      toast.error(`${errorMessage}`)
     }
   }, [errorMessage])
 
@@ -24,7 +25,7 @@ export const RegisterPage = () => {
     event.preventDefault()
 
     if (password !== confirmPassword) {
-      Swal.fire('Register failed', 'Passwords are not the same', 'error')
+      toast.error('Register failed: Passwords are not the same')
       return
     }
 

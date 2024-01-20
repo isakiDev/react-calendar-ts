@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { clearErrorMessage, onChecking, onLogin, onLogout, onLogoutCalendar, type RootState } from '../store'
-import { type AuthUser, type TokenResponse } from '../types'
+import { type ErrorResponse, type AuthUser, type TokenResponse, type ValidationError, type ValidationErrors } from '../types'
 
 import { calendarApi } from '../config'
+import { type AxiosError, isAxiosError } from 'axios'
 
 export const useAuthStore = () => {
   const dispatch = useDispatch()
@@ -18,7 +19,7 @@ export const useAuthStore = () => {
 
       dispatch(onLogin({ name: data.user.name, id: data.user.id }))
     } catch (error) {
-      dispatch(onLogout('Incorrect credentials'))
+      dispatch(onLogout('Invalid email or password'))
 
       setTimeout(() => {
         dispatch(clearErrorMessage())
@@ -30,18 +31,26 @@ export const useAuthStore = () => {
     dispatch(onChecking())
 
     try {
-      // create a user
+      const { data } = await calendarApi.post<TokenResponse>('auth/register', { name, email, password })
 
-      window.localStorage.setItem('token', 'dawdawdawd')
+      window.localStorage.setItem('token', data.token)
 
-      dispatch(onLogin({ name: 'TestRegister', id: '1' }))
+      dispatch(onLogin({ name: data.user.name, id: data.user.id }))
     } catch (error) {
-      // dispatch(onLogout(error.response.data?.msg || '--'))
-      dispatch(onLogout('error'))
+      if (isAxiosError(error)) {
+        const axiosError = error as AxiosError<ErrorResponse>
+        const errors: ValidationErrors[] = axiosError?.response?.data.errors ?? []
+        const message = Object.entries(errors).map(([_, { msg }]) => msg).join('\n')
 
-      // setTimeout(() => {
-      //   dispatch(clearErrorMessage())
-      // }, 10)
+        dispatch(onLogout(message))
+        return
+      }
+
+      dispatch(onLogout('Error'))
+
+      setTimeout(() => {
+        dispatch(clearErrorMessage())
+      }, 10)
     }
   }
 

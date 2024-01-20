@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-import Swal from 'sweetalert2'
+import { toast } from 'sonner'
+
 import { useForm } from '../../hooks/useForm'
 import { useAuthStore } from '../../hooks'
 import { LOGIN_FORM_FIELDS } from '../../consts'
@@ -12,7 +13,7 @@ export const LoginPage = () => {
 
   useEffect(() => {
     if (errorMessage !== null) {
-      Swal.fire('Authentication error', errorMessage, 'error')
+      toast.error(`Authentication error : ${errorMessage}`)
     }
   }, [errorMessage])
 
@@ -38,6 +39,7 @@ export const LoginPage = () => {
               onChange={onInputChange}
               type='email'
               value={email}
+              required
             />
             <label className='font-semibold text-sm text-gray-600 pb-1 block'>Password</label>
             <input
@@ -46,6 +48,7 @@ export const LoginPage = () => {
               onChange={onInputChange}
               type='password'
               value={password}
+              required
             />
             <button
               className='transition duration-200 bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block'
