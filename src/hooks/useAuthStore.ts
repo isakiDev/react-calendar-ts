@@ -43,10 +43,9 @@ export const useAuthStore = () => {
         const message = Object.entries(errors).map(([_, { msg }]) => msg).join('\n')
 
         dispatch(onLogout(message))
-        return
+      } else {
+        dispatch(onLogout('Error'))
       }
-
-      dispatch(onLogout('Error'))
 
       setTimeout(() => {
         dispatch(clearErrorMessage())

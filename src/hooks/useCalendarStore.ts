@@ -1,14 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux'
+
 import {
   onSetActiveEvent,
   onUpdateEvent,
   onLoadEvents,
-  type RootState
+  type RootState,
+  onAddNewEvent
 } from '../store'
 
 import { type CalendarEvent } from '../types'
 import { calendarApi } from '../config'
-import Swal from 'sweetalert2'
+import { convertEventsToDate } from '../helpers'
+import { isAxiosError } from 'axios'
 
 export const useCalendarStore = () => {
   const dispatch = useDispatch()
@@ -19,15 +22,29 @@ export const useCalendarStore = () => {
   }
 
   const startSavingEvent = async (calendarEvent: CalendarEvent) => {
-    dispatch(onUpdateEvent(calendarEvent))
+    try {
+      if (calendarEvent.id) {
+        await calendarApi.put(`calendar/${calendarEvent.id}`, calendarEvent)
+        dispatch(onUpdateEvent(calendarEvent))
+        return
+      }
+
+      const { data } = await calendarApi.post<CalendarEvent>('calendar', { calendarEvent })
+      dispatch(onAddNewEvent({ ...calendarEvent, id: data.id }))
+    } catch (error) {
+      if (isAxiosError(error)) throw error
+      throw new Error('Error to update event')
+    }
   }
 
   const startLoadingEvents = async () => {
     try {
-      const { data } = await calendarApi.get('/calendar')
-      dispatch(onLoadEvents(data))
+      const { data } = await calendarApi.get<CalendarEvent[]>('calendar')
+      const events = convertEventsToDate(data)
+
+      dispatch(onLoadEvents(events))
     } catch (error) {
-      Swal.fire('Error')
+      throw new Error('Error loading events')
     }
   }
 
