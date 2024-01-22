@@ -31,17 +31,21 @@ export interface TokenResponse {
   }
 }
 
-interface ValidationError {
+export interface ValidationError {
   type: string
+  value: string
   msg: string
   path: string
   location: string
 }
 
-type ValidationErrors = Record<string, ValidationError>
+export type ValidationErrors = Record<string, ValidationError>
 
-interface ErrorResponse {
-  errors: ValidationErrors[]
+export interface ErrorResponse {
+  errors: ValidationErrors
 }
 
 export type ErrorType = Error | AxiosError
+
+// form
+export type FormValidation = Record<string, [(value: string) => boolean, string]> | {}

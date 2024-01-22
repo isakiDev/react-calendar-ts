@@ -1,23 +1,24 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { clearErrorMessage, onChecking, onLogin, onLogout, onLogoutCalendar, type RootState } from '../store'
-import { type ErrorResponse, type AuthUser, type TokenResponse, type ValidationError, type ValidationErrors } from '../types'
 
+import { clearErrorMessage, onChecking, onLogin, onLogout, onLogoutCalendar, type RootState } from '../store'
+import { handleErrorAxios } from '../helpers'
 import { calendarApi } from '../config'
-import { type AxiosError, isAxiosError } from 'axios'
+import { type ErrorType, type AuthUser, type TokenResponse } from '../types'
 
 export const useAuthStore = () => {
-  const dispatch = useDispatch()
   const { user, errorMessage, status } = useSelector((state: RootState) => state.auth)
+  const dispatch = useDispatch()
 
   const startLogin = async ({ email, password }: AuthUser) => {
     dispatch(onChecking())
 
     try {
       const { data } = await calendarApi.post<TokenResponse>('auth/login', { email, password })
+      const { id, name } = data.user
 
       window.localStorage.setItem('token', data.token)
 
-      dispatch(onLogin({ name: data.user.name, id: data.user.id }))
+      dispatch(onLogin({ name, id }))
     } catch (error) {
       dispatch(onLogout('Invalid email or password'))
 
@@ -37,15 +38,7 @@ export const useAuthStore = () => {
 
       dispatch(onLogin({ name: data.user.name, id: data.user.id }))
     } catch (error) {
-      if (isAxiosError(error)) {
-        const axiosError = error as AxiosError<ErrorResponse>
-        const errors: ValidationErrors[] = axiosError?.response?.data.errors ?? []
-        const message = Object.entries(errors).map(([_, { msg }]) => msg).join('\n')
-
-        dispatch(onLogout(message))
-      } else {
-        dispatch(onLogout('Error'))
-      }
+      dispatch(onLogout(handleErrorAxios(error as ErrorType)))
 
       setTimeout(() => {
         dispatch(clearErrorMessage())
@@ -60,10 +53,11 @@ export const useAuthStore = () => {
 
     try {
       const { data } = await calendarApi.get<TokenResponse>('auth/rev')
+      const { id, name } = data.user
 
       window.localStorage.setItem('token', data.token)
 
-      dispatch(onLogin({ name: data.user.name, id: data.user.id }))
+      dispatch(onLogin({ name, id }))
     } catch (error) {
       dispatch(onLogout(null))
     }

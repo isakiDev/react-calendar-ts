@@ -2,13 +2,18 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import { toast } from 'react-hot-toast'
-
 import { useForm } from '../../hooks/useForm'
+
 import { useAuthStore } from '../../hooks'
-import { LOGIN_FORM_FIELDS } from '../../consts'
+import { LOGIN_FORM_FIELDS, LOGIN_FORM_VALIDATIONS } from '../../consts'
 
 export const LoginPage = () => {
-  const { email, password, onInputChange } = useForm({ initialState: LOGIN_FORM_FIELDS })
+  const { email, password, onInputChange, isFormValid, getValidationError } = useForm({
+    initialState: LOGIN_FORM_FIELDS,
+    formValidations: LOGIN_FORM_VALIDATIONS
+
+  })
+
   const { startLogin, errorMessage } = useAuthStore()
 
   useEffect(() => {
@@ -19,6 +24,11 @@ export const LoginPage = () => {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
+    if (!isFormValid) {
+      toast.error(getValidationError)
+      return
+    }
 
     startLogin({ email, password })
   }

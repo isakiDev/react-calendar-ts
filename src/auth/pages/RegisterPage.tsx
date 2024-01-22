@@ -5,11 +5,20 @@ import { toast } from 'react-hot-toast'
 
 import { useForm } from '../../hooks/useForm'
 import { useAuthStore } from '../../hooks'
-import { REGISTER_FORM_FIELDS } from '../../consts'
+import { REGISTER_FORM_FIELDS, REGISTER_FORM_VALIDATIONS } from '../../consts'
 
 export const RegisterPage = () => {
-  const { name, email, password, confirmPassword, onInputChange } = useForm({
-    initialState: REGISTER_FORM_FIELDS
+  const {
+    name,
+    email,
+    password,
+    confirmPassword,
+    onInputChange,
+    isFormValid,
+    getValidationError
+  } = useForm({
+    initialState: REGISTER_FORM_FIELDS,
+    formValidations: REGISTER_FORM_VALIDATIONS
   })
 
   const { errorMessage, startRegister } = useAuthStore()
@@ -23,8 +32,13 @@ export const RegisterPage = () => {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
+    if (!isFormValid) {
+      toast.error(getValidationError)
+      return
+    }
+
     if (password !== confirmPassword) {
-      toast.error('Register failed: Passwords are not the same')
+      toast.error('Passwords are not the same')
       return
     }
 
@@ -46,6 +60,7 @@ export const RegisterPage = () => {
           <div className='px-5 py-7'>
             <label className='font-semibold text-sm text-gray-600 pb-1 block'>Name</label>
             <input
+              required
               className='border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full'
               name='name'
               onChange={onInputChange}
@@ -54,6 +69,7 @@ export const RegisterPage = () => {
             />
             <label className='font-semibold text-sm text-gray-600 pb-1 block'>E-mail</label>
             <input
+              required
               className='border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full'
               name='email'
               onChange={onInputChange}
@@ -62,6 +78,7 @@ export const RegisterPage = () => {
             />
             <label className='font-semibold text-sm text-gray-600 pb-1 block'>Password</label>
             <input
+              required
               className='border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full'
               name='password'
               onChange={onInputChange}
@@ -70,6 +87,7 @@ export const RegisterPage = () => {
             />
             <label className='font-semibold text-sm text-gray-600 pb-1 block'>Confirm Password</label>
             <input
+              required
               className='border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full'
               name='confirmPassword'
               onChange={onInputChange}

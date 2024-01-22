@@ -33,6 +33,7 @@ module.exports = {
         "react/react-in-jsx-scope": "off",
         "@typescript-eslint/strict-boolean-expressions": "off",
 
-        "@typescript-eslint/no-floating-promises": "off"
+        "@typescript-eslint/no-floating-promises": "off",
+        "@typescript-eslint/ban-types": "off"
     }
 }
