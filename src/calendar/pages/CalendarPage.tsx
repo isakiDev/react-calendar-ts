@@ -16,7 +16,7 @@ export const CalendarPage = () => {
   const { user } = useAuthStore()
 
   const eventStyleGetter = (event: CalendarEventType) => {
-    const isMyEvent = user?.id === event.user._id
+    const isMyEvent = user?.id === event?.user?.id
 
     const style = {
       backgroundColor: isMyEvent ? '#000' : '#465660',
