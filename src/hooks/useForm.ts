@@ -1,5 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
-import { type FormValidation } from '../types'
+import { type ValidationResponse, type FormValidation } from '../types'
+
+type FormState = Record<string, any>
 
 interface Props<T> {
   initialState: T
@@ -11,9 +13,9 @@ interface DatePickerChange {
   type: 'start' | 'end'
 }
 
-export const useForm = <T>({ initialState, formValidations = {} }: Props<T>) => {
+export const useForm = <T extends FormState>({ initialState, formValidations = {} }: Props<T>) => {
   const [formState, setFormState] = useState(initialState)
-  const [formValidation, setFormValidation] = useState({})
+  const [formValidation, setFormValidation] = useState<ValidationResponse>({})
 
   useEffect(() => {
     createValidators()
@@ -46,7 +48,7 @@ export const useForm = <T>({ initialState, formValidations = {} }: Props<T>) => 
   }
 
   const createValidators = () => {
-    const formCheckValues = {}
+    const formCheckValues: ValidationResponse = {}
 
     for (const formField of Object.keys(formValidations)) {
       const [fn, errorMessage] = formValidations[formField]

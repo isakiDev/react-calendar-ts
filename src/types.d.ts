@@ -48,4 +48,5 @@ export interface ErrorResponse {
 export type ErrorType = Error | AxiosError
 
 // form
-export type FormValidation = Record<string, [(value: string) => boolean, string]> | {}
+export type FormValidation = Record<string, [(value: any) => boolean, string]>
+export type ValidationResponse = Record<string, string | null>
