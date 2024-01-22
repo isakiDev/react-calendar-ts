@@ -14,8 +14,11 @@ export const uiSlice = createSlice({
   reducers: {
     onToggleModal: (state) => {
       state.isOpenModal = !state.isOpenModal
+    },
+    onCloseModal: (state) => {
+      state.isOpenModal = false
     }
   }
 })
 
-export const { onToggleModal } = uiSlice.actions
+export const { onToggleModal, onCloseModal } = uiSlice.actions

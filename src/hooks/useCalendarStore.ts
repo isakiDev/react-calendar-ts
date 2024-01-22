@@ -7,7 +7,8 @@ import {
   type RootState,
   onAddNewEvent,
   onDeleteEvent,
-  onToggleModal
+  onToggleModal,
+  onCloseModal
 } from '../store'
 
 import { type ErrorType, type CalendarEvent } from '../types'
@@ -57,6 +58,7 @@ export const useCalendarStore = () => {
       const events = convertEventsToDate(data)
 
       dispatch(onLoadEvents(events))
+      dispatch(onCloseModal())
     } catch (error) {
       throw new Error(handleErrorAxios(error as TypeError))
     }
