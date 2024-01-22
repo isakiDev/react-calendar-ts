@@ -7,7 +7,7 @@ export interface CalendarEvent {
   notes: string
   start: Date
   end: Date
-  user: User
+  user: User | null
 }
 
 export interface User {

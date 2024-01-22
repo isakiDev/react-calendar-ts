@@ -10,6 +10,7 @@ export const handleErrorAxios = (error: Error | AxiosError): string => {
   if (error.response?.data?.errors) {
     const axiosError = error as AxiosError<ErrorResponse>
     const errors: ValidationErrors = axiosError?.response?.data?.errors ?? {}
+
     return Object.entries(errors).map(([_, { msg }]) => msg).join('\n')
   }
   

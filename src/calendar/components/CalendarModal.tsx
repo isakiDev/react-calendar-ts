@@ -1,31 +1,19 @@
 import { useEffect } from 'react'
 
 import Modal from 'react-modal'
-import { addHours, differenceInSeconds } from 'date-fns'
+import { differenceInSeconds } from 'date-fns'
 import DatePicker, { registerLocale } from 'react-datepicker'
-import es from 'date-fns/locale/es'
 import { toast } from 'react-hot-toast'
+import es from 'date-fns/locale/es'
 
 import { useCalendarStore, useForm, useUiStore } from '../../hooks'
-import { type ErrorType, type CalendarEvent } from '../../types.d'
 
 import 'react-datepicker/dist/react-datepicker.css'
-import { handleErrorAxios } from '../../helpers'
+import { CALENDAR_FORM_FIELDS, CALENDAR_FORM_VALIDATIONS } from '../../consts'
+import { ButtonDelete } from '..'
 
 registerLocale('es', es)
 Modal.setAppElement('#root')
-
-const initialState: CalendarEvent = {
-  id: '',
-  user: {
-    id: '',
-    name: ''
-  },
-  title: '',
-  notes: '',
-  start: new Date(),
-  end: addHours(new Date(), 2)
-}
 
 export const CalendarModal = () => {
   const { toggleModal, isOpenModal } = useUiStore()
@@ -39,8 +27,13 @@ export const CalendarModal = () => {
     formState,
     onInputChange,
     onDateChange,
-    onSetFormState
-  } = useForm({ initialState })
+    onSetFormState,
+    isFormValid,
+    getValidationError
+  } = useForm({
+    initialState: CALENDAR_FORM_FIELDS,
+    formValidations: CALENDAR_FORM_VALIDATIONS
+  })
 
   useEffect(() => {
     if (activeEvent !== null) {
@@ -54,18 +47,18 @@ export const CalendarModal = () => {
     const difference = differenceInSeconds(end, start)
 
     if (isNaN(difference) || difference <= 0) {
-      toast.error('Invalid date')
+      toast.error('Invalid start or end date')
       return
     }
 
-    if (title.trim().length <= 0) {
-      toast.error('The title must not be empty')
+    if (!isFormValid) {
+      toast.error(getValidationError)
       return
     }
 
     startSavingEvent(formState)
-      .then(() => toast.success('Event updated'))
-      .catch((error: ErrorType) => toast.error(handleErrorAxios(error)))
+      .then(() => toast.success('Event saved'))
+      .catch((error: Error) => toast.error(error.message))
 
     toggleModal()
   }
@@ -84,9 +77,7 @@ export const CalendarModal = () => {
       }}
     >
       <h1 className='font-bold text-2xl pb-4'>New Event</h1>
-
       <hr />
-
       <form
         className='flex flex-col gap-2 px-4 py-2'
         onSubmit={onSubmit}
@@ -138,12 +129,17 @@ export const CalendarModal = () => {
             value={notes}
           />
         </div>
+
         <button
           className='py-2 px-4 rounded-md text-cyan-700 border border-cyan-700 font-semibold hover:bg-cyan-700 hover:text-white duration-300'
         >
           Save
         </button>
+
+        { activeEvent?.id && <ButtonDelete/>}
+
       </form>
+
     </Modal>
   )
 }

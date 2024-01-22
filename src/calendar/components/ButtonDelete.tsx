@@ -1,22 +1,21 @@
-import { useUiStore } from '../../hooks'
+import toast from 'react-hot-toast'
+import { useCalendarStore } from '../../hooks'
 
 export const ButtonDelete = () => {
-  // const { hasEventSelected, startDeletingEvent } = useCalendarStore()
-  const { isOpenModal } = useUiStore()
+  const { startDeletingEvent } = useCalendarStore()
 
   const handleClickDelete = () => {
-    // startDeletingEvent()
+    startDeletingEvent()
+      .then(() => toast.success('Event Deleted'))
+      .catch((error: Error) => toast.error(error.message))
   }
 
   return (
     <button
+      type='button'
       aria-label='btn-delete'
-      className='fixed bottom-8 left-8 bg-red-700 rounded-full w-[50px] h-[50px] font-bold text-white text-xl
-      hover:bg-red-800'
       onClick={handleClickDelete}
-      // style={{ display: hasEventSelected && !isOpenModal ? '' : 'none' }}
-    >
-      -
-    </button>
+      className='w-full py-2 px-4 rounded-md text-red-800 border border-red-800 font-semibold hover:bg-red-800 hover:text-white duration-300'
+    >Delete</button>
   )
 }

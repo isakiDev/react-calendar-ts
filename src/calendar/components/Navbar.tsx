@@ -5,13 +5,14 @@ export const Navbar = () => {
 
   return (
     <nav
-      className='flex justify-between items-center p-3 bg-gray-950 mb-4 shadow-lg'
+      className='flex justify-between items-center p-3 bg-slate-950 mb-4 shadow-sm'
     >
-      <h1 className='text-gray-200 font-semibold'>{user?.name}</h1>
+      <h1 className='text-gray-200 font-bold'>{user?.name}</h1>
+
       <button
-        className='py-1 px-4 bg-transparent border-[1px] border-red-600 rounded-md text-gray-200 hover:bg-red-800 duration-300'
+        className='py-1 px-2 bg-transparent border-[1px] border-red-800 rounded-xl text-gray-200 hover:bg-red-900 duration-300'
         onClick={startLogout}
-      >Salir
+      >Sign out
       </button>
     </nav>
   )

@@ -5,17 +5,20 @@ import {
   onUpdateEvent,
   onLoadEvents,
   type RootState,
-  onAddNewEvent
+  onAddNewEvent,
+  onDeleteEvent,
+  onToggleModal
 } from '../store'
 
-import { type CalendarEvent } from '../types'
+import { type ErrorType, type CalendarEvent } from '../types'
 import { calendarApi } from '../config'
-import { convertEventsToDate } from '../helpers'
-import { isAxiosError } from 'axios'
+import { convertEventsToDate, handleErrorAxios } from '../helpers'
 
 export const useCalendarStore = () => {
-  const dispatch = useDispatch()
   const { events, activeEvent } = useSelector((state: RootState) => state.calendar)
+  const { user } = useSelector((state: RootState) => state.auth)
+
+  const dispatch = useDispatch()
 
   const setActiveEvent = (calendarEvent: CalendarEvent) => {
     dispatch(onSetActiveEvent(calendarEvent))
@@ -25,15 +28,26 @@ export const useCalendarStore = () => {
     try {
       if (calendarEvent.id) {
         await calendarApi.put(`calendar/${calendarEvent.id}`, calendarEvent)
-        dispatch(onUpdateEvent(calendarEvent))
+        dispatch(onUpdateEvent({ ...calendarEvent, user }))
         return
       }
 
-      const { data } = await calendarApi.post<CalendarEvent>('calendar', { calendarEvent })
-      dispatch(onAddNewEvent({ ...calendarEvent, id: data.id }))
+      const { data } = await calendarApi.post<CalendarEvent>('calendar', calendarEvent)
+
+      dispatch(onAddNewEvent({ ...calendarEvent, id: data.id, user }))
     } catch (error) {
-      if (isAxiosError(error)) throw error
-      throw new Error('Error to update event')
+      throw new Error(handleErrorAxios(error as TypeError))
+    }
+  }
+
+  const startDeletingEvent = async () => {
+    try {
+      await calendarApi.delete(`calendar/${activeEvent?.id}`)
+      dispatch(onDeleteEvent())
+    } catch (error) {
+      throw new Error(handleErrorAxios(error as ErrorType))
+    } finally {
+      dispatch(onToggleModal())
     }
   }
 
@@ -44,7 +58,7 @@ export const useCalendarStore = () => {
 
       dispatch(onLoadEvents(events))
     } catch (error) {
-      throw new Error('Error loading events')
+      throw new Error(handleErrorAxios(error as TypeError))
     }
   }
 
@@ -54,6 +68,7 @@ export const useCalendarStore = () => {
 
     setActiveEvent,
     startSavingEvent,
+    startDeletingEvent,
     startLoadingEvents
   }
 }

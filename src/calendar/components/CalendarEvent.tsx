@@ -9,8 +9,8 @@ export const CalendarEvent = ({ event }: Props) => {
 
   return (
     <>
-      <strong>{title}</strong>
-      <span> {user?.name}</span>
+      <span>{title} - </span>
+      <strong>{user?.name}</strong>
     </>
   )
 }

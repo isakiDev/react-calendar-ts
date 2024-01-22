@@ -1,9 +1,12 @@
 import { addHours } from 'date-fns'
 import { useCalendarStore, useUiStore } from '../../hooks'
+import { useSelector } from 'react-redux'
+import { type RootState } from '../../store'
 
 export const ButtonAdd = () => {
   const { toggleModal } = useUiStore()
   const { setActiveEvent } = useCalendarStore()
+  const { user } = useSelector(((state: RootState) => state.auth))
 
   const handleClick = () => {
     setActiveEvent({
@@ -11,19 +14,17 @@ export const ButtonAdd = () => {
       notes: '',
       start: new Date(),
       end: addHours(new Date(), 2),
-      user: {
-        id: '123',
-        name: 'Gaspar'
-      }
+      user
     })
 
     toggleModal()
   }
 
   return (
-    <button
-      className='fixed bottom-8 right-8 bg-blue-600 rounded-full w-[80px] h-[80px] font-bold text-white text-xl
-      hover:bg-blue-700 border border-blue-800'
+
+   <button
+      className='fixed bottom-8 right-8 bg-slate-800 rounded-full w-[70px] h-[70px] shadow-sm font-bold text-white text-xl
+      hover:bg-slate-900'
       onClick={handleClick}
     >
       +
