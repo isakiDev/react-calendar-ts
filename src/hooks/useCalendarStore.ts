@@ -54,11 +54,12 @@ export const useCalendarStore = () => {
 
   const startLoadingEvents = async () => {
     try {
+      dispatch(onCloseModal())
+
       const { data } = await calendarApi.get<CalendarEvent[]>('calendar')
       const events = convertEventsToDate(data)
 
       dispatch(onLoadEvents(events))
-      dispatch(onCloseModal())
     } catch (error) {
       throw new Error(handleErrorAxios(error as TypeError))
     }
