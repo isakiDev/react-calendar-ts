@@ -1,4 +1,4 @@
-# Steps
+## Deployment
 
 - npm i / pnpm i
 - create .env file
