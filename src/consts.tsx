@@ -8,8 +8,8 @@ export const AUTH_STATUS = {
 } as const
 
 export const LOGIN_FORM_FIELDS = {
-  email: '',
-  password: ''
+  email: 'johndoe@gmail.com',
+  password: 'qqqqqq'
 }
 
 export const LOGIN_FORM_VALIDATIONS: FormValidation = {
