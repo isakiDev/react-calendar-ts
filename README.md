@@ -8,7 +8,7 @@
 ```
 npm i
 ```
-3. Clone file **.env.template** and rename the copy to **.env**
+3. Clone file ```.env.template``` and rename the copy to ```.env```
 4. Fill data into .env
 6. Run application
 ```
